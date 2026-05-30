@@ -6,5 +6,5 @@ edition = "2024"
 [dependencies]
 sdl3 = {
     version = "0.18.3",
-    features = ["build-from-source-static"]
+    features = ["build-from-source-static", "image"]
 }
