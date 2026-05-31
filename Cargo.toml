@@ -8,3 +8,4 @@ sdl3 = {
     version = "0.18.3",
     features = ["build-from-source-static", "image"]
 }
+glam = "0.33.0"

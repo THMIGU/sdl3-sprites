@@ -1,11 +1,14 @@
 #![windows_subsystem = "windows"]
 
+mod assets;
 mod fps;
+mod sprite;
 
+use glam::Vec2;
 use sdl3::{event::Event, pixels::Color};
 use std::time::{Duration, Instant};
 
-use crate::fps::FPS;
+use crate::{assets::Assets, fps::FPS, sprite::Sprite};
 
 const TICK_RATE: f64 = 60_f64;
 const WINDOW_WIDTH: u32 = 800;
@@ -22,6 +25,10 @@ fn main() {
 		.unwrap();
 
 	let mut canvas = window.into_canvas();
+	let texture_creator = canvas.texture_creator();
+
+	let assets = Assets::new(&texture_creator);
+	let mut sprite = Sprite::from_texture(assets.get_texture("ball"));
 
 	let mut event_pump = sdl_context
 		.event_pump()
@@ -49,6 +56,14 @@ fn main() {
 		}
 
 		while accumulator >= tick_time {
+			let mouse = event_pump.mouse_state();
+
+			let dx = 325_f32 - mouse.x();
+			let dy = 325_f32 - mouse.y();
+
+			let angle = dy.atan2(dx);
+			sprite.rotation = angle.to_degrees();
+
 			accumulator -= tick_time;
 		}
 
@@ -61,6 +76,9 @@ fn main() {
 
 		canvas.set_draw_color(Color::BLACK);
 		canvas.clear();
+
+		canvas.set_draw_color(Color::WHITE);
+		sprite.draw(&mut canvas, Vec2::new(300_f32, 300_f32));
 
 		canvas.present();
 	}
