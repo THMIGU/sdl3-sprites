@@ -32,9 +32,10 @@ impl<'a> Assets<'a> {
 				.to_string_lossy()
 				.into_owned();
 
-			let texture = texture_creator
+			let mut texture = texture_creator
 				.load_texture(&path)
 				.unwrap();
+			texture.set_scale_mode(sdl3::render::ScaleMode::Nearest);
 			textures.insert(name, texture);
 		}
 
